@@ -1,0 +1,109 @@
+# VALRES2 - GitIgnore
+
+# Configuration sensible
+config/config.local.php
+config/secrets.php
+
+# Fichiers de logs
+*.log
+logs/
+error.log
+access.log
+
+# Fichiers temporaires
+*.tmp
+*.temp
+*~
+.DS_Store
+Thumbs.db
+
+# Dossiers de cache
+cache/
+tmp/
+temp/
+
+# Exports générés (optionnel - à adapter selon besoins)
+exports/*.xml
+exports/*.csv
+exports/*.pdf
+
+# Dependencies et packages
+vendor/
+node_modules/
+composer.lock
+package-lock.json
+
+# IDE et éditeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Système d'exploitation
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Environnement local
+.env
+.env.local
+.env.*.local
+
+# Archives et compressions
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Fichiers de développement
+todo.txt
+notes.md
+debug.php
+test.php
+
+# Images et médias volumineux (garder les petites images pour la démo)
+uploads/large/
+assets/images/large/
+
+# Documentation générée automatiquement
+docs/generated/
+phpdoc/
+
+# Tests et coverage
+coverage/
+.coverage
+phpunit.xml.local
+tests/coverage/
+
+# Base de données locale
+*.sqlite
+*.db
+database/local/
+
+# Fichiers de session (si stockés en fichiers)
+sessions/
+tmp/sessions/
+
+# Fichiers spécifiques au projet
+config/database.local.php
+maintenance.html
+
+# Sauvegarde automatique éditeurs
+*~
+*.orig
+*.rej
+
+# Fichiers de version et build
+version.txt
+build/
+dist/
