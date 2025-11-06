@@ -66,7 +66,7 @@ try {
 }
 
 echo "<h2>🎯 Résumé</h2>";
-echo "<p>Si tous les tests sont ✅, votre installation est prête !</p>";
+echo "<p>Si tous les tests sont ✅, l'installation est prête !</p>";
 echo "<p><a href='index.php'>🚀 Lancer l'application</a></p>";
 
 // Style basique

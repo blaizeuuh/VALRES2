@@ -1,5 +1,5 @@
 // assets/script.js - Scripts côté client pour améliorer l'UX en version PHP
-
+/** 
 document.addEventListener('DOMContentLoaded', function() {
     initializeFormValidation();
     initializeAutoHideMessages();
@@ -121,3 +121,4 @@ function initializeUserExperience() {
         }
     });
 }
+    */
