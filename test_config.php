@@ -1,47 +1,47 @@
 <?php
 // test_config.php - Script de test de la configuration
 
-echo "<h1>🔧 Test de Configuration VALRES2</h1>";
+echo "<h1>Test de Configuration VALRES2</h1>";
 
 // Test de la version PHP
 echo "<h2>Version PHP</h2>";
 if (version_compare(PHP_VERSION, '7.4.0') >= 0) {
-    echo "✅ PHP " . PHP_VERSION . " (Compatible)";
+    echo "PHP " . PHP_VERSION . " (Compatible)";
 } else {
-    echo "❌ PHP " . PHP_VERSION . " (Requiert PHP 7.4+)";
+    echo "PHP " . PHP_VERSION . " (Requiert PHP 7.4+)";
 }
 
 // Test de l'extension PDO SQLite
 echo "<h2>Extensions PHP</h2>";
 if (extension_loaded('pdo_sqlite')) {
-    echo "✅ PDO SQLite disponible<br>";
+    echo "PDO SQLite disponible<br>";
 } else {
-    echo "❌ PDO SQLite manquant<br>";
+    echo "PDO SQLite manquant<br>";
 }
 
 if (extension_loaded('pdo')) {
-    echo "✅ PDO disponible<br>";
+    echo "PDO disponible<br>";
 } else {
-    echo "❌ PDO manquant<br>";
+    echo "PDO manquant<br>";
 }
 
 // Test des permissions de fichier
 echo "<h2>Permissions</h2>";
 $dataDir = __DIR__ . '/data';
 if (is_writable(__DIR__)) {
-    echo "✅ Dossier racine accessible en écriture<br>";
+    echo "Dossier racine accessible en écriture<br>";
 } else {
-    echo "❌ Dossier racine non accessible en écriture<br>";
+    echo "Dossier racine non accessible en écriture<br>";
 }
 
 if (is_dir($dataDir)) {
     if (is_writable($dataDir)) {
-        echo "✅ Dossier data/ accessible en écriture<br>";
+        echo "Dossier data/ accessible en écriture<br>";
     } else {
-        echo "❌ Dossier data/ non accessible en écriture<br>";
+        echo "Dossier data/ non accessible en écriture<br>";
     }
 } else {
-    echo "ℹ️ Dossier data/ sera créé automatiquement<br>";
+    echo "ℹDossier data/ sera créé automatiquement<br>";
 }
 
 // Test de création de la base de données
@@ -51,7 +51,7 @@ try {
     $database = new Database();
     $reservationManager = new ReservationManager($database);
     
-    echo "✅ Connexion à la base de données réussie<br>";
+    echo "Connexion à la base de données réussie<br>";
     
     // Test d'une requête
     $salles = $reservationManager->getSalles();
@@ -64,7 +64,7 @@ try {
     echo "✅ " . count($reservations) . " réservation(s) de démonstration chargée(s)<br>";
     
 } catch (Exception $e) {
-    echo "❌ Erreur base de données : " . $e->getMessage() . "<br>";
+    echo "Erreur base de données : " . $e->getMessage() . "<br>";
 }
 
 echo "<h2>🎯 Résumé</h2>";

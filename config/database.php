@@ -1,4 +1,5 @@
 <?php
+// config/database.php - Configuration et initialisation de la base de données (PDO)
 
 // Paramètres par défaut (modifiable selon l'environnement)
 if (!defined('DB_HOST')) define('DB_HOST', 'localhost');
@@ -128,6 +129,7 @@ class UserManager {
         }
         
     }
+    }
 }
 
 class ReservationManager {
@@ -148,6 +150,7 @@ class ReservationManager {
             $db = new Database();
             $this->pdo = $db->getPdo();
         }
+<<<<<<< HEAD
         $this->initializeTables();
     }
     
@@ -170,6 +173,11 @@ class ReservationManager {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
         return $stmt->fetchAll();
+=======
+    }
+    
+    public function getAllReservations($filtreEtat = '', $filtreSalle = '') {
+>>>>>>> b25a6297a703374c77a6fc14a4615da3ea977b03
     }
     
     /**
@@ -178,6 +186,7 @@ class ReservationManager {
      */
 
     public function createReservation($data) {
+<<<<<<< HEAD
         $sql = "INSERT INTO reservations (salle, date, heure, utilisateur_id, etat) 
                 VALUES (:salle, :date, :heure, :utilisateur_id, :etat)";
         $params = [
@@ -231,10 +240,22 @@ class ReservationManager {
         $result = $stmt->fetchAll();
         return count($result) === 0;
         
+=======
+    }
+    
+    public function updateEtatReservation($id, $nouvelEtat) {
+    }
+    
+    public function deleteReservation($id) {
+    }
+    
+    public function checkDisponibilite($salle, $date, $heureDebut, $heureFin, $excludeId = null) {
+>>>>>>> b25a6297a703374c77a6fc14a4615da3ea977b03
     }
 
     
     public function getDisponibilites($date) {
+<<<<<<< HEAD
         $sql = "SELECT * FROM reservations WHERE date = :date AND etat = 'disponible'";
         $params = ['date' => $date];
         $stmt = $this->pdo->prepare($sql);
@@ -252,6 +273,11 @@ class ReservationManager {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
         return $stmt->fetchAll();
+=======
+    }
+    
+    public function getReservationsBySalleAndDate($salle, $date) {
+>>>>>>> b25a6297a703374c77a6fc14a4615da3ea977b03
     }
     
     public function getSalles() {
