@@ -1,3 +1,78 @@
+<?php
+session_start();
+require_once "config/database.php";
+
+// Traitement de la déconnexion
+if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+    session_destroy();
+    header('Location: index.php');
+    exit;
+}
+
+// Redirection si déjà connecté
+if (isset($_SESSION['user'])) {
+    switch ($_SESSION['user']['role']) {
+        case 'administrateur':
+            header('Location: pages/administrateur/index.php');
+            break;
+        case 'secretariat':
+            header('Location: pages/secretariat/index.php');
+            break;
+        case 'responsable':
+            header('Location: pages/responsable/index.php');
+            break;
+        case 'utilisateur':
+            header('Location: pages/utilisateur/index.php');
+            break;
+    }
+    exit;
+}
+
+$error = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
+    $nom_utilisateur = $_POST['nom_utilisateur'] ?? '';
+    $mot_de_passe = $_POST['mot_de_passe'] ?? '';
+
+    if ($nom_utilisateur && $mot_de_passe) {
+        try {
+            $database = new Database();
+            $userManager = new UserManager($database);
+            
+            $ok = $userManager->verifyLogin($nom_utilisateur, $mot_de_passe); // Renvoie true si les identifiants sont corrects
+            if ($ok) {
+                $user = $_SESSION['user'];
+                
+                // Redirection selon le rôle
+                switch ($user['role']) {
+                    case '1':
+                        header('Location: pages/administrateur/index.php');
+                        break;
+                    case '2':
+                        header('Location: pages/secretariat/index.php');
+                        break;
+                    case '3':
+                        header('Location: pages/responsable/index.php');
+                        break;
+                    case '4':
+                        header('Location: pages/utilisateur/index.php');
+                        break;
+                    default:
+                        $error = 'Rôle utilisateur non reconnu.';
+                }
+                exit;
+            } else {
+                $error = 'Nom d\'utilisateur ou mot de passe incorrect.';
+            }
+        } catch (Exception $e) {
+            $error = 'Erreur de connexion : ' . $e->getMessage();
+        }
+    } else {
+        $error = 'Veuillez saisir votre nom d\'utilisateur et votre mot de passe.';
+    }
+}
+?>
 <!doctype html>
 
 <html>
@@ -118,21 +193,44 @@
         </style>
     </head>
     <body style="margin: 0; padding: 0; min-height: 100vh; display: flex; justify-content: center; align-items: center; background-color: #f0f0f0;">
-        <form class="form">
+        
+        <?php if ($error): ?>
+            <div style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #fee; border: 1px solid #fcc; color: #c33; padding: 15px 20px; border-radius: 5px; z-index: 1000;">
+                <?= htmlspecialchars($error) ?>
+            </div>
+        <?php endif; ?>
+        
+        <div style="text-align: center; margin-bottom: 20px;">
+            <h1 style="color: #333; margin-bottom: 10px;">🏢 VALRES2</h1>
+            <p style="color: #666; margin-bottom: 30px;">Système de Gestion des Réservations de Salles</p>
+            
+            <!-- Informations de connexion -->
+            <div style="background: #e8f4fd; border: 1px solid #b3d9f7; border-radius: 8px; padding: 15px; margin-bottom: 20px; text-align: left; max-width: 400px;">
+                <h3 style="margin: 0 0 10px 0; color: #1a5490;">Comptes de démonstration :</h3>
+                <div style="font-size: 12px; color: #4a5568; line-height: 1.4;">
+                    <strong>Secrétariat :</strong> secretariat / secret123<br>
+                    <strong>Responsable :</strong> responsable / resp123<br>
+                    <strong>Administrateur :</strong> admin / admin123<br>
+                    <strong>Utilisateur :</strong> utilisateur / user123
+                </div>
+            </div>
+        </div>
+        
+        <form class="form" action="index.php" method="post">
             <p>Se connecter</p>
             <div class="group">
-                <input required="true" class="main-input" type="text">
+                <input required="true" class="main-input" type="text" name="nom_utilisateur" value="<?= htmlspecialchars($_POST['nom_utilisateur'] ?? '') ?>" required>
                 <span class="highlight-span"></span>
-                <label class="lebal-email">Nom</label>
+                <label class="lebal-email">Nom d'utilisateur</label>
             </div>
             <div class="container-1">
                 <div class="group">
-                <input required="true" class="main-input" type="text">
+                <input required="true" class="main-input" type="password" name="mot_de_passe" required>
                 <span class="highlight-span"></span>
                 <label class="lebal-email">Mot de passe</label>
                 </div>
             </div>
-            <button class="submit">Envoyer</button>
+            <button class="submit" type="submit">Se connecter</button>
         </form>
     </body>
 </html>

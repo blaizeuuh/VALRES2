@@ -1,5 +1,4 @@
 <?php
-// config/database.php - Configuration et initialisation de la base de données (PDO)
 
 // Paramètres par défaut (modifiable selon l'environnement)
 if (!defined('DB_HOST')) define('DB_HOST', 'localhost');
@@ -85,7 +84,52 @@ class Database {
     }
 }
 
-// Classe pour gérer les réservations
+class UserManager {
+    /** @var \PDO */
+    private $pdo;
+
+    /**
+     * UserManager constructor.
+     * @param Database $database
+     */
+    public function __construct(Database $database) {
+        $this->pdo = $database->getPdo();
+    }
+
+    public function getUserByName($username) {
+    }
+
+    public function verifyLogin($nom, $password) {
+        // Retourne true si les identifiants sont corrects, false sinon. Recherche dans la base de données (table utilisateur)
+        $pdo = $this->pdo;
+        $stmt = $pdo->prepare("SELECT mdp FROM utilisateur WHERE nom = :username");
+        $stmt->execute(['username' => $nom]);
+        $user = $stmt->fetch();
+
+        // Récupérer les données de l'utilisateur
+        $prenom = $user['prenom'] ?? '';
+        $role = $user['acteur'] ?? '';
+        $mail = $user['mail'] ?? '';
+        $structure = $user['structure'] ?? '';
+        $structure_adresse = $user['structure_adresse'] ?? '';
+
+
+        if ($user && password_verify($password, $user['mdp'])) {
+            $_SESSION['user']['username'] = $nom;
+            $_SEESION['user']['prenom'] = $prenom;
+            $_SESSION['user']['role'] = $role;
+            $_SESSION['user']['mail'] = $mail;
+            $_SESSION['user']['structure'] = $structure;
+            $_SESSION['user']['structure_adresse'] = $structure_adresse;
+            
+            return true;
+        } else {
+            return false;
+        }
+        
+    }
+}
+
 class ReservationManager {
     /** @var \PDO */
     private $pdo;
@@ -104,27 +148,110 @@ class ReservationManager {
             $db = new Database();
             $this->pdo = $db->getPdo();
         }
+        $this->initializeTables();
     }
     
     public function getAllReservations($filtreEtat = '', $filtreSalle = '') {
+        $sql = "SELECT * FROM reservations WHERE 1=1";
+        $params = [];
+        
+        if ($filtreEtat) {
+            $sql .= " AND etat = ?";
+            $params[] = $filtreEtat;
+        }
+        
+        if ($filtreSalle) {
+            $sql .= " AND salle = ?";
+            $params[] = $filtreSalle;
+        }
+        
+        $sql .= " ORDER BY date DESC, heure_debut ASC";
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
     }
     
+    /**
+     * Penser a heure dbut heure fin a ajouter dans la requete en sous 
+     * et aussi dans la BDD
+     */
+
     public function createReservation($data) {
+        $sql = "INSERT INTO reservations (salle, date, heure, utilisateur_id, etat) 
+                VALUES (:salle, :date, :heure, :utilisateur_id, :etat)";
+        $params = [
+            'salle' => $data['salle'],
+            'date' => $data['date'],
+            'heure' => $data['heure'],
+            'utilisateur_id' => $data['utilisateur_id'],
+            'etat' => 'en_attente'
+        ];
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
     }
     
     public function updateEtatReservation($id, $nouvelEtat) {
+        $sql = "UPDATE reservations SET etat = :etat WHERE id = :id";
+        $params = [
+            'etat' => $nouvelEtat,
+            'id' => $id
+        ];
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
     }
     
     public function deleteReservation($id) {
+        $sql = "DELETE FROM reservations WHERE id = :id";
+        $params = ['id' => $id];
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
     }
     
     public function checkDisponibilite($salle, $date, $heureDebut, $heureFin, $excludeId = null) {
+        $sql = "SELECT * FROM reservations WHERE salle = :salle AND date = :date 
+                AND ((heure_debut < :heureFin AND heure_fin > :heureDebut))";
+        $params = [
+            'salle' => $salle,
+            'date' => $date,
+            'heureDebut' => $heureDebut,
+            'heureFin' => $heureFin
+            
+        ];
+        if ($excludeId) {
+            $sql .= " AND id != :excludeId";
+            $params['excludeId'] = $excludeId;
+        }
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        $result = $stmt->fetchAll();
+        return count($result) === 0;
+        
     }
+
     
     public function getDisponibilites($date) {
+        $sql = "SELECT * FROM reservations WHERE date = :date AND etat = 'disponible'";
+        $params = ['date' => $date];
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
+        
     }
     
     public function getReservationsBySalleAndDate($salle, $date) {
+        $sql = "SELECT * FROM reservations WHERE salle = :salle AND date = :date";
+        $params = [
+            'salle' => $salle,
+            'date' => $date
+        ];
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
     }
     
     public function getSalles() {

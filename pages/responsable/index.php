@@ -37,6 +37,10 @@ $filtreSalle = $_GET['filtre_salle'] ?? '';
 $reservations = $reservationManager->getAllReservations($filtreEtat, $filtreSalle);
 $salles = $reservationManager->getSalles();
 
+// S'assurer que les variables sont des tableaux
+$reservations = is_array($reservations) ? $reservations : [];
+$salles = is_array($salles) ? $salles : [];
+
 // Section active
 $section = $_GET['section'] ?? 'liste';
 ?>
@@ -150,7 +154,10 @@ $section = $_GET['section'] ?? 'liste';
                     </form>
 
                     <?php if (isset($_GET['date_consultation'])): ?>
-                        <?php $disponibilites = $reservationManager->getDisponibilites($_GET['date_consultation']); ?>
+                        <?php 
+                        $disponibilites = $reservationManager->getDisponibilites($_GET['date_consultation']); 
+                        $disponibilites = is_array($disponibilites) ? $disponibilites : [];
+                        ?>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
                             <?php foreach ($disponibilites as $dispo): ?>
                                 <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
@@ -158,7 +165,9 @@ $section = $_GET['section'] ?? 'liste';
                                     <?php if (empty($dispo['reservations'])): ?>
                                         <div class="px-3 py-2 rounded-md text-sm mb-2 bg-green-100 text-green-800">🟢 Entièrement libre</div>
                                     <?php else: ?>
-                                        <?php foreach ($dispo['reservations'] as $res): ?>
+                                        <?php 
+                                        $reservations_dispo = is_array($dispo['reservations']) ? $dispo['reservations'] : [];
+                                        foreach ($reservations_dispo as $res): ?>
                                             <div class="px-3 py-2 rounded-md text-sm mb-2 bg-red-100 text-red-800">
                                                 🔴 <?= $res['heure_debut'] ?>-<?= $res['heure_fin'] ?> 
                                                 (<?= htmlspecialchars($res['responsable']) ?>)
