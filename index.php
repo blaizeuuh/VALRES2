@@ -53,7 +53,9 @@ $section = $_GET['section'] ?? 'liste';
 <body class="bg-gray-100 min-h-screen">
     <div class="container mx-auto px-4 py-6 max-w-7xl">
         <header class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-            <h1 class="text-3xl font-bold text-gray-900 mb-6 text-center">🏢 VALRES2 - Gestion des Réservations</h1>
+
+            <h1 class="text-3xl font-bold text-gray-900 mb-6 text-center">Gestion des Réservations</h1>
+
             <nav class="flex flex-col sm:flex-row gap-3 justify-center">
                 <a href="?section=nouvelle" class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 <?= $section == 'nouvelle' ? 'bg-blue-700 hover:bg-blue-800 focus:ring-blue-500' : 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500' ?>">
                     ➕ Nouvelle Réservation
@@ -68,6 +70,7 @@ $section = $_GET['section'] ?? 'liste';
                     📄 Exporter XML
                 </a>
             </nav>
+            
         </header>
 
         <main>
@@ -156,11 +159,11 @@ $section = $_GET['section'] ?? 'liste';
                                 <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
                                     <h4 class="text-lg font-semibold text-gray-900 mb-3"><?= htmlspecialchars($dispo['salle']) ?></h4>
                                     <?php if (empty($dispo['reservations'])): ?>
-                                        <div class="px-3 py-2 rounded-md text-sm mb-2 bg-green-100 text-green-800">🟢 Entièrement libre</div>
+                                        <div class="px-3 py-2 rounded-md text-sm mb-2 bg-green-100 text-green-800"> Entièrement libre</div>
                                     <?php else: ?>
                                         <?php foreach ($dispo['reservations'] as $res): ?>
                                             <div class="px-3 py-2 rounded-md text-sm mb-2 bg-red-100 text-red-800">
-                                                🔴 <?= $res['heure_debut'] ?>-<?= $res['heure_fin'] ?> 
+                                                <?= $res['heure_debut'] ?>-<?= $res['heure_fin'] ?> 
                                                 (<?= htmlspecialchars($res['responsable']) ?>)
                                             </div>
                                         <?php endforeach; ?>
@@ -232,20 +235,20 @@ $section = $_GET['section'] ?? 'liste';
                                                             <input type="hidden" name="action" value="update_etat">
                                                             <input type="hidden" name="id" value="<?= $reservation['id'] ?>">
                                                             <input type="hidden" name="etat" value="Confirmé">
-                                                            <button type="submit" class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:ring-green-500 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2">✅ Confirmer</button>
+                                                            <button type="submit" class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:ring-green-500 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2">Confirmer</button>
                                                         </form>
                                                         <form method="POST" style="display: inline;">
                                                             <input type="hidden" name="action" value="update_etat">
                                                             <input type="hidden" name="id" value="<?= $reservation['id'] ?>">
                                                             <input type="hidden" name="etat" value="Annulé">
-                                                            <button type="submit" class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-500 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2">❌ Annuler</button>
+                                                            <button type="submit" class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-500 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2">Annuler</button>
                                                         </form>
                                                     <?php endif; ?>
                                                     <form method="POST" style="display: inline;" 
                                                           onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?')">
                                                         <input type="hidden" name="action" value="delete">
                                                         <input type="hidden" name="id" value="<?= $reservation['id'] ?>">
-                                                        <button type="submit" class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:ring-red-500 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2">🗑️ Supprimer</button>
+                                                        <button type="submit" class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:ring-red-500 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2">Supprimer</button>
                                                     </form>
                                                 </div>
                                             </div>
