@@ -55,10 +55,12 @@ try {
     
     // Test d'une requête
     $salles = $reservationManager->getSalles();
+    $salles = is_array($salles) ? $salles : [];
     echo "✅ Requête test réussie - " . count($salles) . " salle(s) trouvée(s)<br>";
     
     // Test des données de démonstration
     $reservations = $reservationManager->getAllReservations();
+    $reservations = is_array($reservations) ? $reservations : [];
     echo "✅ " . count($reservations) . " réservation(s) de démonstration chargée(s)<br>";
     
 } catch (Exception $e) {

@@ -119,20 +119,20 @@
     </head>
     <body style="margin: 0; padding: 0; min-height: 100vh; display: flex; justify-content: center; align-items: center; background-color: #f0f0f0;">
         <form class="form">
-            <p>Login</p>
+            <p>Se connecter</p>
             <div class="group">
                 <input required="true" class="main-input" type="text">
                 <span class="highlight-span"></span>
-                <label class="lebal-email">Email</label>
+                <label class="lebal-email">Nom</label>
             </div>
             <div class="container-1">
                 <div class="group">
                 <input required="true" class="main-input" type="text">
                 <span class="highlight-span"></span>
-                <label class="lebal-email">password</label>
+                <label class="lebal-email">Mot de passe</label>
                 </div>
             </div>
-            <button class="submit">submit</button>
+            <button class="submit">Envoyer</button>
         </form>
     </body>
 </html>
