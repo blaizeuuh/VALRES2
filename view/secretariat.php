@@ -3,7 +3,7 @@
 session_start();
 
 // Vérification de l'authentification et du rôle
-if (!isset($_SESSION['user']) || $_SESSION['user']['role_nom'] !== 'secretariat') {
+if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'secretariat') {
     header('Location: ../../index.php');
     exit;
 }
@@ -28,7 +28,7 @@ if ($_POST) {
             $message = $result['message'];
             $messageType = $result['success'] ? 'success' : 'error';
             break;
-            
+             
         case 'validate':
             // Validation d'une réservation provisoire
             $result = $reservationManager->updateEtatReservation($_POST['id'], 'Confirmé');
@@ -317,8 +317,7 @@ $salles = is_array($salles) ? $salles : [];
                     <h2 class="text-2xl font-bold text-gray-900 mb-6">➕ Créer une Nouvelle Réservation</h2>
                     <p class="text-gray-600 mb-6">En tant que secrétariat, vous pouvez créer une réservation directement confirmée ou la laisser en état provisoire.</p>
                     
-                    <form method="POST" action="">
-                        <input type="hidden" name="action" value="create">
+                    <form method="POST" action="?create">
                         
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             <div>
@@ -530,9 +529,7 @@ $salles = is_array($salles) ? $salles : [];
                                                             <button type="submit" class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-500 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2">❌ Rejeter</button>
                                                         </form>
                                                     <?php endif; ?>
-                                                    <form method="POST" style="display: inline;" 
-                                                          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?')">
-                                                        <input type="hidden" name="action" value="delete">
+                                                    <form method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?')" action="?delete">
                                                         <input type="hidden" name="id" value="<?= $reservation['id'] ?>">
                                                         <button type="submit" class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:ring-red-500 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2">🗑️ Supprimer</button>
                                                     </form>

@@ -11,24 +11,9 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
 
 // Redirection si déjà connecté
 if (isset($_SESSION['user'])) {
-    switch ($_SESSION['user']['role']) {
-        case 'administrateur':
-            header('Location: pages/administrateur/index.php');
-            break;
-        case 'secretariat':
-            header('Location: pages/secretariat/index.php');
-            break;
-        case 'responsable':
-            header('Location: pages/responsable/index.php');
-            break;
-        case 'utilisateur':
-            header('Location: pages/utilisateur/index.php');
-            break;
-    }
+    header('Location: controller/index.php');
     exit;
 }
-
-$error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
@@ -44,23 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($ok) {
                 $user = $_SESSION['user'];
                 
-                // Redirection selon le rôle
-                switch ($user['role']) {
-                    case '1':
-                        header('Location: pages/administrateur/index.php');
-                        break;
-                    case '2':
-                        header('Location: pages/secretariat/index.php');
-                        break;
-                    case '3':
-                        header('Location: pages/responsable/index.php');
-                        break;
-                    case '4':
-                        header('Location: pages/utilisateur/index.php');
-                        break;
-                    default:
-                        $error = 'Rôle utilisateur non reconnu.';
-                }
+                header("Location : controller/main.php");
                 exit;
             } else {
                 $error = 'Nom d\'utilisateur ou mot de passe incorrect.';
@@ -74,7 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 <!doctype html>
-
 <html>
     <head>
         <meta charset="utf-8">
@@ -208,10 +176,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div style="background: #e8f4fd; border: 1px solid #b3d9f7; border-radius: 8px; padding: 15px; margin-bottom: 20px; text-align: left; max-width: 400px;">
                 <h3 style="margin: 0 0 10px 0; color: #1a5490;">Comptes de démonstration :</h3>
                 <div style="font-size: 12px; color: #4a5568; line-height: 1.4;">
-                    <strong>Secrétariat :</strong> secretariat / secret123<br>
-                    <strong>Responsable :</strong> responsable / resp123<br>
-                    <strong>Administrateur :</strong> admin / admin123<br>
-                    <strong>Utilisateur :</strong> utilisateur / user123
+                    <strong>Secrétariat :</strong> BANDILELLA / 123<br>
+                    <strong>Responsable :</strong> BIACQUEL / 123<br>
+                    <strong>Administrateur :</strong> SILBERT / 123<br>
+                    <strong>Utilisateur :</strong> PERNOT / 123
                 </div>
             </div>
         </div>
